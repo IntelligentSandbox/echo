@@ -1,0 +1,3 @@
+[submodule "services/tts"]
+	path = services/tts
+	url = git@github.com:ramonasuncion/tts.git
