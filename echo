@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+
+BASE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SERVICES=(tts:src/app.py llm:src/app.py stt:src/app.py avatar:src/server.py)
+
+start() {
+    mkdir -p "$BASE/.pids"
+    for entry in "${SERVICES[@]}"; do
+        name="${entry%%:*}" script="${entry##*:}"
+        cd "$BASE/services/$name"
+        uv run python "$script" >> "$BASE/.pids/$name.log" 2>&1 &
+        echo $! > "$BASE/.pids/$name.pid"
+    done
+    echo "Started. Logs: ./echo logs"
+}
+
+stop() {
+    fuser -k 8000/tcp 8001/tcp 8002/tcp 8003/tcp 8004/tcp 2>/dev/null
+    rm -f "$BASE/.pids"/*.pid
+    echo "Stopped."
+}
+
+setup() {
+    git submodule update --init --recursive
+    uv sync
+}
+
+logs() { tail -f "$BASE/.pids"/*.log; }
+
+case "$1" in
+    start)   start ;;
+    stop)    stop ;;
+    restart) stop; sleep 1; start ;;
+    setup)   setup ;;
+    logs)    logs ;;
+    *)       echo "Usage: ./echo start|stop|restart|setup|logs" ;;
+esac
