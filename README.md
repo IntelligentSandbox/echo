@@ -18,7 +18,7 @@ A Live2D AI VTuber built as a microservices monorepo.
 ## Setup
 
 ```bash
-git clone git@github.com:ramonasuncion/echo.git
+git clone git@github.com:IntelligentSandbox/echo.git
 cd echo
 git submodule update --init services/tts services/stt
 uv sync
