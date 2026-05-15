@@ -4,6 +4,7 @@ version = "0.1.0"
 description = "Echo AI VTuber monorepo"
 requires-python = ">=3.11"
 dependencies = [
+    "avatar",
     "llm",
     "stt",
     "tts",
@@ -11,12 +12,14 @@ dependencies = [
 
 [tool.uv.workspace]
 members = [
+    "services/avatar/src",
     "services/llm/src",
     "services/stt/src",
     "services/tts/src",
 ]
 
 [tool.uv.sources]
+avatar = { workspace = true }
 llm = { workspace = true }
 stt = { workspace = true }
 tts = { workspace = true }
